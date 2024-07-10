@@ -10,7 +10,7 @@ const wellKnownPath = path.join(__dirname, '.well-known');
 
 // CORS configuration
 const corsOptions = {
-  origin: 'https://paypalapplepay.onrender.com', // Replace with your frontend domain
+  origin: 'https://paypal-apple-pay.onrender.com', // Corrected frontend domain
   optionsSuccessStatus: 200
 };
 
@@ -27,6 +27,15 @@ app.get('/paypal-config', (req, res) => {
     clientId: 'AaF3x4iq4bsKKonOBX9fVMarJwTojQJYfN5D4jMXdxw3odvvLOkj-EWqTmzus7miBn35D9XrhhbfRKGA',
     enableFunding: 'applepay'
   });
+});
+
+// Error handling for CORS issues
+app.use((err, req, res, next) => {
+  if (err.name === 'CorsError') {
+    res.status(400).json({ message: 'CORS error', details: err.message });
+  } else {
+    next(err);
+  }
 });
 
 app.listen(port, () => {
